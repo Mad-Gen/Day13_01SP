@@ -1,4 +1,4 @@
-package app;
+package app.poker;
 
 import playingcard.Card;
 import playingcard.Player;

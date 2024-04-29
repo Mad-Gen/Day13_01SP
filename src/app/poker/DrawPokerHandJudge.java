@@ -1,4 +1,4 @@
-package app;
+package app.poker;
 import java.util.Arrays;
 import java.util.Comparator;
 

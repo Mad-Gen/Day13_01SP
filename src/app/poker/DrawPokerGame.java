@@ -1,8 +1,9 @@
-package app;
+package app.poker;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import app.Game;
 import lib.Console;
 import lib.Input;
 import playingcard.Card;
