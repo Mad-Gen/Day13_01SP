@@ -198,7 +198,7 @@ public class DrawPokerGame extends Game{
       }
 	  });
 	  
-	  // 1番と2番を取り出してスコアを比較します。同点だった場合はこの両者でもう一度カードの強さを比較する必要があります。
+	  // 同点の可能性があるため、1番と2番を取り出してスコアを比較します。
 	  Result r = list.get(0);
 	  if(list.size() >= 2) {
 	    Result r2 = list.get(1);
@@ -241,5 +241,27 @@ public class DrawPokerGame extends Game{
 	  DrawPokerGame game = new DrawPokerGame();
 	  Player win = game.judge(new Player[] {p1, p2});
 	  System.out.println(win.getName());
+	  
+	  
+	  System.out.println("--- Memory Game ---");
+	  System.out.println();
+	  
+	  System.out.print("    ");
+	  for(int i=0; i<cards1.length; i++) {
+	    System.out.print(String.format("%-4s", (i+1)));
+	  }
+	  
+	  System.out.println();
+	  System.out.println("------------------------");
+	  
+	  for(int j=0; j<5; j++) {
+	    System.out.print((j+1) + " | ");
+	    
+	    for(int i=0; i<cards1.length; i++) {
+	      System.out.print(cards1[i]);
+	      System.out.print(" ");
+	    }
+	    System.out.println();
+	  }
 	}
 }
