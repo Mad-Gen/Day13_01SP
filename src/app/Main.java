@@ -1,6 +1,7 @@
 package app;
 
 import app.poker.DrawPokerGame;
+import app.sevens.Sevens;
 import lib.Console;
 import lib.Input;
 
@@ -13,7 +14,8 @@ public class Main {
 
   // クラスを登録する
   private Game[] games = {
-    new DrawPokerGame()
+    new DrawPokerGame(),
+    new Sevens()
   };
   
   /**
@@ -26,6 +28,7 @@ public class Main {
     while(true) {
       Console.outH1("▶ 何で遊びますか？", "");
       Console.outln("[1] : ドローポーカー(5カードポーカー)");
+      Console.outln("[2] : 7並べ");
       Console.outln("[9] : 終了");
       Console.outln("");
       

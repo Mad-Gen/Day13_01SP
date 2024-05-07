@@ -84,6 +84,17 @@ public class Card {
 	}
 	
 	/**
+	 * カードを伏せた状態の文字列を取得
+	 * @return
+	 */
+	public static String maskedString() {
+	  String str = "";
+	  str += "*";
+	  str += "__";
+	  return str;
+	}
+	
+	/**
 	 * カード情報を文字列で表示します。
 	 */
 	@Override

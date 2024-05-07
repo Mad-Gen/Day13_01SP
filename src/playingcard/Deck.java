@@ -86,4 +86,11 @@ public class Deck {
 		}
 	}
 	
+	/**
+	 * 山札の数を取得
+	 * @return
+	 */
+	public int getSize() {
+	  return listCards.size();
+	}
 }
