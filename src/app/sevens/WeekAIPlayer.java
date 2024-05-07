@@ -50,6 +50,7 @@ public class WeekAIPlayer extends SevensPlayer{
       Card ch = listHand.get(i);
       int index = candidates.indexOf(ch);
       if(index != -1) {
+        // 出せるカードが見つかったらそれに決めてしまう。戦略性は全くない。
         this.nextDiscard = i;
         break;
       }
@@ -61,6 +62,10 @@ public class WeekAIPlayer extends SevensPlayer{
    */
   @Override
   public Card[] discard() {
+    // AI が考えているふりをするために、少し処理を止める。
+    try{ Thread.sleep((int)(Math.random() * 1000)); }catch(Exception e) {
+    }
+    
     if(nextDiscard >= 0) {
       Card c = this.listHand.remove(nextDiscard);
       return new Card[] {c};

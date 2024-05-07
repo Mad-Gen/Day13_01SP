@@ -24,6 +24,7 @@ public class Sevens extends Game{
       new WeekAIPlayer("Doraemon"),
       new WeekAIPlayer("Gian"),
       new WeekAIPlayer("Suneo"),
+      new WeekAIPlayer("Shizuka")
   };
   
   private List<SevensPlayer> winner = new ArrayList<>();
@@ -74,38 +75,40 @@ public class Sevens extends Game{
       
       Console.outH1("場に出すカードを選んでください。");
       for(SevensPlayer p : players) {
-
-        // 手札の選択
-        while(true) {
-          this.showHand(p);
+        if(p.getHand().length > 0) {
           
-          // AIが現在のテーブルを参照してどのカードを切るか決められるようにする。
-          if(p instanceof WeekAIPlayer) {
-            ((WeekAIPlayer)p).setReferenceTable(table);
-          }
+          // 手札の選択
+          while(true) {
+            this.showHand(p);
 
-          // 場に出すカードを選択
-          Card[] discard = p.discard();
-          if(discard.length <= 0){
-            Console.outln("パスしました。");
-            break;
-          }else{
-            if(setToTable(discard) == false){
-              Console.outln("そのカードは出せません。");
-              p.addHand(discard); // カードを切るのに失敗したら手札に戻す。
-            }else{
+            // AIが現在のテーブルを参照してどのカードを切るか決められるようにする。
+            if(p instanceof WeekAIPlayer) {
+              ((WeekAIPlayer)p).setReferenceTable(table);
+            }
+
+            // 場に出すカードを選択
+            Card[] discard = p.discard();
+            if(discard.length <= 0){
+              Console.outln("パスしました。");
               break;
+            }else{
+              if(setToTable(discard) == false){
+                Console.outln("そのカードは出せません。");
+                p.addHand(discard); // カードを切るのに失敗したら手札に戻す。
+              }else{
+                break;
+              }
             }
           }
-        }
 
-        // テーブルを表示
-        Console.outH1("現在のテーブル");
-        this.showTable(table);
-        Console.outln("");
+          // テーブルを表示
+          Console.outH1("現在のテーブル");
+          this.showTable(table);
+          Console.outln("");
+        }
         
-        // もち札が無くなった準でプレイヤーを記録します。
-        if(p.getHand().length <= 0) {
+        // もち札が無くなった順番にプレイヤーを記録します。
+        if(p.getHand().length <= 0 && winner.contains(p)) {
           this.winner.add(p);
         }
       }
