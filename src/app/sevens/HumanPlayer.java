@@ -1,17 +1,13 @@
 package app.sevens;
-import java.util.ArrayList;
-import java.util.List;
-
 import lib.Input;
 import playingcard.Card;
-import playingcard.Player;
 
 /**
  * 人が操作するプレイヤークラス
  * @author M_Nukari
  *
  */
-public class HumanPlayer extends Player{
+public class HumanPlayer extends SevensPlayer{
 	
 	/**
 	 * コンストラクタ
@@ -19,22 +15,6 @@ public class HumanPlayer extends Player{
 	 */
 	public HumanPlayer(String name) {
 		super(name);
-	}
-	
-	/**
-	 * 7のカードを取り出す
-	 * @return
-	 */
-	public Card[] getNumber7Cards() {
-	  List<Card> list = new ArrayList<>();
-	  for(int i=listHand.size()-1; i>=0; i--) {
-	    Card c = this.listHand.get(i);
-	    if(c.getNumber() == 7) {
-	      this.listHand.remove(i);
-	      list.add(c);
-	    }
-	  }
-	  return (list.toArray(new Card[0]));
 	}
 
 	/**
@@ -77,4 +57,13 @@ public class HumanPlayer extends Player{
 			}
 		}
 	}
+	
+	/**
+   * カードを表示
+   * @param info
+   * @param card
+   */
+  public void showCard() {
+    super.showCard();
+  }
 }

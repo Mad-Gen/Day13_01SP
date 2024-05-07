@@ -104,4 +104,18 @@ public class Card {
 		str += getNumberAsString();
 		return str;
 	}
+	
+	/**
+	 * 比較する。
+	 * @param c
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object o) {
+	  if(o instanceof Card == false) {
+	    return false;
+	  }
+	  Card c = (Card)o;
+	  return (getSuit() == c.getSuit() && getNumber() == c.getNumber());
+	}
 }

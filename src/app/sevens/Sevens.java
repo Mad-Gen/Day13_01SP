@@ -1,5 +1,8 @@
 package app.sevens;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import app.Game;
 import lib.Console;
 import lib.Input;
@@ -15,9 +18,15 @@ public class Sevens extends Game{
   private Deck deck = new Deck();
   private Card[][] table = new Card[4][13];
   
-  private HumanPlayer[] players = {
-      new HumanPlayer("suneo")
+  private SevensPlayer[] players = {
+      new HumanPlayer("You"),
+      new WeekAIPlayer("Nobita"),
+      new WeekAIPlayer("Doraemon"),
+      new WeekAIPlayer("Gian"),
+      new WeekAIPlayer("Suneo"),
   };
+  
+  private List<SevensPlayer> winner = new ArrayList<>();
   
   /**
    * スタート時に一度だけ実行される
@@ -38,7 +47,14 @@ public class Sevens extends Game{
     Console.outH1("テーブルをセッティングしています...");
     
     // カードを引く
-    players[0].addHand(deck.draw(deck.getSize()));
+    int div = deck.getSize() / players.length;
+    for(SevensPlayer p : players) {
+      p.addHand(deck.draw(div));
+    }
+    if(deck.getSize() > 0) {
+      // 余りが出たら最後の人に追加。
+      players[players.length-1].addHand(deck.draw(deck.getSize()));
+    }
     
     // テーブルのセッティング
     for(int i=0; i<players.length; i++) {
@@ -53,44 +69,59 @@ public class Sevens extends Game{
     // テーブルを表示
     this.showTable(table);
     
-    //
-    while(true) {
+    // まだ配置されていないスペースがある限り続ける。
+    while(getEmptySize(table) > 0) {
+      
       Console.outH1("場に出すカードを選んでください。");
+      for(SevensPlayer p : players) {
 
-      // 手札の選択
-      while(true) {
-        this.showHand(players[0]);
+        // 手札の選択
+        while(true) {
+          this.showHand(p);
+          
+          // AIが現在のテーブルを参照してどのカードを切るか決められるようにする。
+          if(p instanceof WeekAIPlayer) {
+            ((WeekAIPlayer)p).setReferenceTable(table);
+          }
 
-        // 場に出すカードを選択
-        Console.outln("");
-        //
-        Card[] discard = players[0].discard();
-        if(discard.length <= 0){
-          Console.outln("パスしました。");
-          break;
-        }else{
-          if(setToTable(discard) == false){
-            Console.outln("そのカードは出せません。");
-            players[0].addHand(discard); // カードを切るのに失敗したら手札に戻す。
-          }else{
+          // 場に出すカードを選択
+          Card[] discard = p.discard();
+          if(discard.length <= 0){
+            Console.outln("パスしました。");
             break;
+          }else{
+            if(setToTable(discard) == false){
+              Console.outln("そのカードは出せません。");
+              p.addHand(discard); // カードを切るのに失敗したら手札に戻す。
+            }else{
+              break;
+            }
           }
         }
-      }
 
-      // テーブルを表示
-      Console.outH1("現在のテーブル");
-      this.showTable(table);
+        // テーブルを表示
+        Console.outH1("現在のテーブル");
+        this.showTable(table);
+        Console.outln("");
+        
+        // もち札が無くなった準でプレイヤーを記録します。
+        if(p.getHand().length <= 0) {
+          this.winner.add(p);
+        }
+      }
       
       //
       Console.outln("");
       String s_next = Input.getString("続ける: Push Enter, 終了: <Exit>");
       if(s_next != null && (s_next.equalsIgnoreCase("<exit>") || s_next.equalsIgnoreCase("exit"))) {
-        //return CANCEL; //　ゲームを終了する。
-        break;
+        return CANCEL; //　ゲームを終了する。
       }
       Console.outln("");
     }
+    
+    //
+    Console.outH1("勝敗");
+    Console.outln("勝者は " + winner.get(0).getName() + " でした!");
     
     return NORMAL;
   }
@@ -141,11 +172,31 @@ public class Sevens extends Game{
   }
   
   /**
+   * テーブルの空きスペース
+   * @param table
+   * @return
+   */
+  private int getEmptySize(Card[][] table) {
+    int count = 0;
+    for(int i=0; i<table.length; i++) {
+      Card[] set = table[i];
+      for(int j=0; j<set.length; j++) {
+        if(set[j] == null) {
+          count++;
+        }
+      }
+    }
+    
+    return count;
+  }
+  
+  /**
    * 手札を表示
    * @param p
    */
-  private void showHand(HumanPlayer p) {
+  private void showHand(SevensPlayer p) {
     p.showCard();
+    Console.outln("");
     Console.outln("");
   }
 }
