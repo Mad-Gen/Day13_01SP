@@ -108,7 +108,7 @@ public class Sevens extends Game{
         }
         
         // もち札が無くなった順番にプレイヤーを記録します。
-        if(p.getHand().length <= 0 && winner.contains(p)) {
+        if(p.getHand().length <= 0 && winner.contains(p) == false) {
           this.winner.add(p);
         }
       }
